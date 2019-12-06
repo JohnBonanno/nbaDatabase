@@ -99,6 +99,7 @@ try:
             response=0
         else:
             print ("no such menu option")
+            print ("no such menu option")
 
 
 
