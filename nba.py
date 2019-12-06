@@ -22,6 +22,7 @@ try:
         print ("Press 1 to see all teams")
         print ("Press 2 to see all players on a specific team")
         print ("Press 3 to see information about the tallest or heaviest players")
+        print ("Press 4 to filter players by position ")
         print ("Press 0 to exit")
 
 
@@ -31,7 +32,8 @@ try:
         
 
         if num==1:
-            print ("")             
+            print ("")      
+
             cursor.execute("""SELECT team.team_name FROM team""")
 
             for (team_name) in cursor:
@@ -41,6 +43,7 @@ try:
             print ("")
             teamName = input("Please enter a team name to view: ")
             print("")
+
             cursor.execute("""SELECT Player.fname, Player.lname, team.team_name 
                             FROM team
                             INNER JOIN Player on team.id = Player.team_id
@@ -54,23 +57,44 @@ try:
             print ("")
             choose = input("Please enter either height or weight to see the three tallest or heaviest players: ")
             if choose=='height':
+
                 cursor.execute("""SELECT Player.fname, Player.lname, Player.heightInCm, Player.weightInLbs, team.team_name 
                             FROM team
                             INNER JOIN Player on team.id = Player.team_id
                             ORDER BY heightInCm DESC limit 3;""")
+
                 for (fname,lname,heightInCm, weightInLbs,team_name) in cursor:
                     print("")
                     print(f'{fname} {lname} of the {team_name } stands tall at: {heightInCm} cm weighing: {weightInLbs} lbs')
 
             elif choose=='weight':
+
                 cursor.execute("""SELECT Player.fname, Player.lname, Player.heightInCm, Player.weightInLbs, team.team_name 
                             FROM team
                             INNER JOIN Player on team.id = Player.team_id
+
                             ORDER BY weightInLbs DESC limit 3;""")
                 for (fname,lname,heightInCm, weightInLbs,team_name) in cursor:
                     print("")
                     print(f'{fname} {lname} of the {team_name } stands tall at: {heightInCm} cm weighing: {weightInLbs} lbs')
         
+        elif num==4:
+            print ("")
+                
+            choose = input("Please enter the position of the players you wish to see: ")
+
+            cursor.execute("""SELECT Player.fname,Player.lname,team.team_name,Player.jersey_num, Player.home_state 
+                        FROM team
+                        INNER JOIN Player on team.id = Player.team_id
+                        WHERE Player.position = %s""", (choose,))
+
+            for (fname,lname,team_name,jersey_num,home_state) in cursor:
+                print("")
+                print(f'{fname} {lname} of the {team_name } wearing jersey number {jersey_num} of {home_state}')
+
+
+
+
         elif num==0:
             response=0
         else:
