@@ -16,7 +16,7 @@ try:
     response = 1
     print ("")
     print ("Welcome to NBA database client")
-    while (response > 0):
+    while (response > 0): 
         print ("")
         print ("Main Menu:")
         print ("Press 1 to see all teams")
@@ -26,24 +26,24 @@ try:
         print ("Press 0 to exit")
 
 
-        completedItemNumber = 0 ###updates with each completion
+        completedItemNumber = 0                                 ##updates with each completion
 
-        num = int(input("Please select an option: "))
+        num = int(input("Please select an option: "))            ##reads choice for menu option
         
 
-        if num==1:
+        if num==1: 
             print ("")      
 
-            cursor.execute("""SELECT team.team_name FROM team""")
+            cursor.execute("""SELECT team.team_name FROM team""")  ##see all team names
 
-            for (team_name) in cursor:
+            for (team_name) in cursor:                              ##print all team names
                 print(f'{team_name}')
                             
-        elif num==2:
+        elif num==2: #see all players on team read from stdin
             print ("")
-            teamName = input("Please enter a team name to view: ")
+            teamName = input("Please enter a team name to view: ")              
             print("")
-
+                                                                        #select all team names of name : <input>, display player and team name
             cursor.execute("""SELECT Player.fname, Player.lname, team.team_name 
                             FROM team
                             INNER JOIN Player on team.id = Player.team_id
@@ -54,7 +54,7 @@ try:
 
 
         elif num==3:
-            print ("")
+            print ("")                                                       #show name ht, wt, team name of heaviest or tallest players
             choose = input("Please enter either height or weight to see the three tallest or heaviest players: ")
             if choose=='height':
 
@@ -82,7 +82,7 @@ try:
             print ("")
                 
             choose = input("Please enter the position of the players you wish to see: ")
-
+                                                                                            #selects player,team name, jersey no, and home state of player 
             cursor.execute("""SELECT Player.fname,Player.lname,team.team_name,Player.jersey_num, Player.home_state 
                         FROM team
                         INNER JOIN Player on team.id = Player.team_id
