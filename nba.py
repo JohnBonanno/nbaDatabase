@@ -23,6 +23,7 @@ try:
         print ("Press 2 to see all players on a specific team")
         print ("Press 3 to see information about the tallest or heaviest players")
         print ("Press 4 to filter players by position ")
+        print ("Press 5 to input team name and see avg height")
         print ("Press 0 to exit")
 
 
@@ -92,22 +93,21 @@ try:
                 print(f'{fname} {lname} of the {team_name } wearing jersey number {jersey_num} of {home_state}')
 
         elif num==5:
-        print ("")
         
-        choose = input("Please enter a team to see the average height of")
-        cursor.execute("""SELECT avg(heightInCm), team.team_name
-        FROM Player
-        INNER JOIN team ON Player.id=team.id
-        WHERE team.team_name IN(
-        SELECT team.team_name
-        FROM team
-        WHERE team.team_name= '%s')""", (choose,))
-        
-        for (fname,lname,team_name,jersey_num,home_state) in cursor:
-        print("")
-        print(f'{fname} {lname} of the {team_name } wearing jersey number {jersey_num} of {home_state}')
-        
-        
+            choose = input("Please enter a team to see the average height of: ")
+            cursor.execute("""SELECT avg(Player.heightInCm), team.team_name 
+                            FROM team
+                            INNER JOIN Player on team.id = Player.team_id
+                            WHERE team.team_name in(
+                            SELECT team.team_name
+                            FROM team
+                            WHERE team.team_name= %s)""", (choose,))
+            
+            print("")
+            for (height,team_name) in cursor:
+                print(f' The average height of the {team_name} is {height} centimeters. ')
+            
+            
         elif num==0:
             response=0
         else:
