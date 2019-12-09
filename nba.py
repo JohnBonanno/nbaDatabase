@@ -72,7 +72,6 @@ try:
                 cursor.execute("""SELECT Player.fname, Player.lname, Player.heightInCm, Player.weightInLbs, team.team_name 
                             FROM team
                             INNER JOIN Player on team.id = Player.team_id
-
                             ORDER BY weightInLbs DESC limit 3;""")
                 for (fname,lname,heightInCm, weightInLbs,team_name) in cursor:
                     print("")
@@ -92,9 +91,23 @@ try:
                 print("")
                 print(f'{fname} {lname} of the {team_name } wearing jersey number {jersey_num} of {home_state}')
 
-
-
-
+        elif num==5:
+        print ("")
+        
+        choose = input("Please enter a team to see the average height of")
+        cursor.execute("""SELECT avg(heightInCm), team.team_name
+        FROM Player
+        INNER JOIN team ON Player.id=team.id
+        WHERE team.team_name IN(
+        SELECT team.team_name
+        FROM team
+        WHERE team.team_name= '%s')""", (choose,))
+        
+        for (fname,lname,team_name,jersey_num,home_state) in cursor:
+        print("")
+        print(f'{fname} {lname} of the {team_name } wearing jersey number {jersey_num} of {home_state}')
+        
+        
         elif num==0:
             response=0
         else:
