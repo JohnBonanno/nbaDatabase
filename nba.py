@@ -24,6 +24,7 @@ try:
         print ("Press 3 to see information about the tallest or heaviest players")
         print ("Press 4 to filter players by position ")
         print ("Press 5 to input team name and see avg height")
+        print ("Press 6 to see the three tallest players of any team ")
         print ("Press 0 to exit")
 
 
@@ -107,6 +108,27 @@ try:
             for (height,team_name) in cursor:
                 print(f' The average height of the {team_name} is {height} centimeters. ')
             
+        elif num==6:
+        
+            choose = input("Please enter a team to see the three tallest players: ")
+            cursor.execute("""SELECT Player.fname, Player.lname, Player.heightInCm
+							FROM team
+							INNER JOIN Player on team.id = Player.team_id
+							WHERE team.team_name IN (
+							SELECT team.team_name 
+							FROM team
+							WHERE team.team_name = %s )
+							ORDER BY Player.heightInCm DESC
+							LIMIT 3""", (choose,))
+            
+            print("")
+            print("the three tallest players are:")
+            for (fname,lname, heightInCm) in cursor:
+                print(f'{fname} {lname} standing at a towering {heightInCm} centimeters. ')    
+
+
+
+
             
         elif num==0:
             response=0
